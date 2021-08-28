@@ -40,22 +40,25 @@ class _SignUpState extends State<SignUp> {
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
-            height: size.height * 0.80,
-            alignment: Alignment.bottomCenter,
-            margin: EdgeInsets.only(top: 10 + size.height * 0.10),
+        child: SizedBox(
+          height: size.height > 800.0 ? size.height * 0.85 : size.height * 0.90,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
             child: Container(
+              padding: EdgeInsets.only(bottom: size.height > 800.0 ? 25 : 10),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Image.asset("assets/images/logo.png"),
+                  Container(
+                      margin:
+                          EdgeInsets.only(bottom: size.height > 800.0 ? 20 : 0),
+                      child: Image.asset("assets/images/logo.png")),
                   Container(
                     child: Column(
                       children: [
                         Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsets.only(top: 10, bottom: 5),
+                          margin: EdgeInsets.only(top: 15, bottom: 5),
                           width: 200,
                           child: Text(
                             "Sign up",
@@ -166,7 +169,9 @@ class _SignUpState extends State<SignUp> {
     Navigator.pushNamed(context, "login");
   }
 
-  void signup() {}
+  void signup() {
+    Navigator.pushNamed(context, "home");
+  }
 
   void forgetPassword() {}
 

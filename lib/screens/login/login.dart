@@ -20,7 +20,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    print(size.height);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -28,119 +28,123 @@ class _LoginState extends State<Login> {
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Container(
-            height: size.height * 0.70,
-            alignment: Alignment.bottomCenter,
-            margin: EdgeInsets.only(top: 20 + size.height * 0.10),
-            child: Column(
-              children: [
-                Image.asset("assets/images/logo.png"),
-                Container(
-                  margin: EdgeInsets.only(top: 15),
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.only(top: 10, bottom: 5),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Rubik-Bold',
-                              fontSize: 26),
-                          textAlign: TextAlign.center,
+        child: SizedBox(
+          height: size.height * 0.85,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Container(
+              padding: EdgeInsets.only(bottom: size.height > 800.0 ? 25 : 5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                      margin:
+                          EdgeInsets.only(bottom: size.height > 800.0 ? 20 : 0),
+                      child: Image.asset("assets/images/logo.png")),
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(top: 10, bottom: 5),
+                          child: Text(
+                            "Login",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Rubik-Bold',
+                                fontSize: 26),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: Form(
-                      child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 16),
-                        child: InputField(
-                          placeholder: "Email",
-                          inputOnchange: inputOnChangeEmail,
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: Form(
+                        child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 16),
+                          child: InputField(
+                            placeholder: "Email",
+                            inputOnchange: inputOnChangeEmail,
+                          ),
                         ),
-                      ),
-                      PasswordField(
-                        inputOnChange: inputOnChangePassword,
-                        isShowPassword: false,
-                      )
-                    ],
-                  )),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: OutlinedButtonApp(
-                    title: "Forgot Password ?",
-                    press: forgetPassword,
+                        PasswordField(
+                          inputOnChange: inputOnChangePassword,
+                          isShowPassword: false,
+                        )
+                      ],
+                    )),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 16),
-                  child: ButtonApp(
-                    title: "Login",
-                    press: login,
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: OutlinedButtonApp(
+                      title: "Forgot Password ?",
+                      press: forgetPassword,
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        width: 320,
-                        margin: EdgeInsets.only(top: 10),
-                        child: Text(
-                          "Login with social networks",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(
-                                  color: Color(0xffF8F5F1),
-                                  fontFamily: 'Rubik',
-                                  fontSize: 14,
-                                  height: 1.3),
-                          textAlign: TextAlign.justify,
+                  Container(
+                    margin: EdgeInsets.only(top: 16),
+                    child: ButtonApp(
+                      title: "Login",
+                      press: login,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: 320,
+                          margin: EdgeInsets.only(top: 10),
+                          child: Text(
+                            "Login with social networks",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(
+                                    color: Color(0xffF8F5F1),
+                                    fontFamily: 'Rubik',
+                                    fontSize: 14,
+                                    height: 1.3),
+                            textAlign: TextAlign.justify,
+                          ),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ButtonSocialNetwork(
-                              press: () => null,
-                              icon: "facebook",
-                            ),
-                            ButtonSocialNetwork(
-                              press: () => null,
-                              icon: "instagram",
-                            ),
-                            ButtonSocialNetwork(
-                              press: () => null,
-                              icon: "google",
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ButtonSocialNetwork(
+                                press: () => null,
+                                icon: "facebook",
+                              ),
+                              ButtonSocialNetwork(
+                                press: () => null,
+                                icon: "instagram",
+                              ),
+                              ButtonSocialNetwork(
+                                press: () => null,
+                                icon: "google",
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: OutlinedButtonApp(
-                    title: "Sign up",
-                    press: signUpPage,
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    child: OutlinedButtonApp(
+                      title: "Sign up",
+                      press: signUpPage,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -148,7 +152,9 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void login() {}
+  void login() {
+    Navigator.pushNamed(context, "home");
+  }
 
   void signUpPage() {
     Navigator.pushNamed(context, "signup");
