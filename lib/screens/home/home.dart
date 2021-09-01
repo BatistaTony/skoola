@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skoola/components/courseCard.dart';
 import 'package:skoola/components/customAppBar.dart';
+import 'package:skoola/components/customNavigationBar.dart';
 import 'package:skoola/components/searchField.dart';
 import 'package:skoola/models/course.dart';
 
@@ -9,6 +10,10 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void seePreview(Course course) {
+      Navigator.pushNamed(context, "coursePreview");
+    }
+
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
@@ -31,8 +36,8 @@ class Home extends StatelessWidget {
           )),
       body: Center(
         child: Container(
-          padding: EdgeInsets.all(20),
-          margin: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.only(left: 20, right: 20, bottom: 0, top: 20),
+          alignment: Alignment.topCenter,
           child: ListView(
               children: courses
                   .map((course) => new CourseCard(
@@ -41,9 +46,14 @@ class Home extends StatelessWidget {
                         title: course.title,
                         description: course.description,
                         tags: course.tags,
+                        press: () => seePreview(course),
                       ))
                   .toList()),
         ),
+      ),
+      bottomNavigationBar: CustomNavigationBar(
+        navigateTo: (page) => print(page),
+        initialPage: "home",
       ),
     );
   }
@@ -52,7 +62,7 @@ class Home extends StatelessWidget {
 List<Course> courses = [
   Course(
       cover: "cover.png",
-      price: 12,
+      price: 12.0000,
       title: "UX Design",
       description:
           "You can launch a new career in web develop-ment today by learning HTML & CSS",

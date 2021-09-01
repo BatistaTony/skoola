@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:skoola/components/buttonSocialNetwork.dart';
 import 'package:skoola/components/customButton.dart';
-
 import 'package:skoola/components/inputField.dart';
 import 'package:skoola/components/outlinedButton.dart';
 import 'package:skoola/components/passwordField.dart';
+import 'package:skoola/screens/home/home.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -170,7 +170,13 @@ class _SignUpState extends State<SignUp> {
   }
 
   void signup() {
-    Navigator.pushNamed(context, "home");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => Home(),
+      ),
+      (route) => false,
+    );
   }
 
   void forgetPassword() {}

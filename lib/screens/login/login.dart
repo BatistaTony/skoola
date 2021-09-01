@@ -5,6 +5,7 @@ import 'package:skoola/components/customButton.dart';
 import 'package:skoola/components/inputField.dart';
 import 'package:skoola/components/outlinedButton.dart';
 import 'package:skoola/components/passwordField.dart';
+import 'package:skoola/screens/home/home.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -20,7 +21,6 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print(size.height);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -153,7 +153,13 @@ class _LoginState extends State<Login> {
   }
 
   void login() {
-    Navigator.pushNamed(context, "home");
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => Home(),
+      ),
+      (route) => false,
+    );
   }
 
   void signUpPage() {

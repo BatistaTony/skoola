@@ -1,13 +1,15 @@
+import 'package:skoola/screens/coursePreview/coursePreview.dart';
 import 'package:skoola/screens/home/home.dart';
 import 'package:skoola/screens/intro/intro.dart';
 import 'package:skoola/screens/login/login.dart';
+import 'package:skoola/screens/profile/profile.dart';
 import 'package:skoola/screens/signup/signup.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
 }
- 
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -20,13 +22,14 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Rubik',
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
       home: Intro(),
       routes: {
         "": (context) => const Intro(),
         "home": (context) => const Home(),
         "login": (context) => const Login(),
-        "signup": (context) => const SignUp()
+        "signup": (context) => const SignUp(),
+        "coursePreview": (context) => const CoursePreview(),
+        "profile": (context) => const Profile()
       },
     );
   }
