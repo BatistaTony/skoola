@@ -18,8 +18,10 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
-      height: 53,
+      height: size.height < 800.0 ? 45 : 53,
       decoration: BoxDecoration(
           color: Color(0xff222140),
           borderRadius: BorderRadius.circular(6),
@@ -42,7 +44,7 @@ class _SearchFieldState extends State<SearchField> {
               suffixIcon: Container(
                   height: 15,
                   width: 15,
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(size.height < 800.0 ? 12 : 11),
                   child: SvgPicture.asset(
                     "assets/icons/search.svg",
                     color: Colors.white,

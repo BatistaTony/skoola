@@ -29,9 +29,10 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
       child: Padding(
         padding: EdgeInsets.all(20),
         child: Container(
-          height: 68,
+          height: 75,
           decoration: BoxDecoration(
-              color: Color(0xff3F3D56), borderRadius: BorderRadius.circular(4)),
+              color: Color(0xff3F3D56),
+              borderRadius: BorderRadius.circular(32)),
           child: Padding(
             padding:
                 const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
@@ -41,7 +42,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               children: [
                 CustomNavigationItem(
                   icon: 'courses',
-                  isActive: page == "home'",
+                  isActive: page == "home",
                   title: "Courses",
                   press: () => page != "home"
                       ? Navigator.pushNamed(context, "home")
@@ -62,6 +63,14 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                   press: () => page != "settings"
                       ? Navigator.pushNamed(context, "settings")
                       : null,
+                ),
+                CustomNavigationItem(
+                  icon: 'setting',
+                  isActive: page == "settings",
+                  title: "Settings",
+                  press: () => page != "settings"
+                      ? Navigator.pushNamed(context, "settings")
+                      : null,
                 )
               ],
             ),
@@ -69,28 +78,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
         ),
       ),
     );
-  }
-
-  void choosePage(BuildContext context, String value) {
-    switch (value) {
-      case "home":
-        {
-          Navigator.pushNamed(context, value);
-          break;
-        }
-
-      case "profile":
-        {
-          Navigator.pushNamed(context, value);
-          break;
-        }
-
-      case "settings":
-        {
-          Navigator.pushNamed(context, value);
-          break;
-        }
-    }
   }
 }
 
@@ -108,7 +95,7 @@ class CustomNavigationItem extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: Container(
-        width: 64,
+        width: 65,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

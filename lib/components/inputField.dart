@@ -10,8 +10,10 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
-      height: 53,
+      height: size.height < 800.0 ? 45 : 53,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           border: Border.all(

@@ -25,8 +25,9 @@ class _PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      height: 53,
+      height: size.height < 800.0 ? 45 : 53,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
@@ -50,7 +51,7 @@ class _PasswordFieldState extends State<PasswordField> {
               suffixIcon: GestureDetector(
                 onTap: showPassword,
                 child: Container(
-                  margin: EdgeInsets.only(right: 15),
+                  margin: EdgeInsets.only(right: size.height < 800.0 ? 16 : 15),
                   width: 10,
                   height: 10,
                   child: SvgPicture.asset(
