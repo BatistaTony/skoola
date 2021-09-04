@@ -3,14 +3,14 @@ import 'package:skoola/components/courseCard.dart';
 import 'package:skoola/components/customAppBar.dart';
 import 'package:skoola/components/customNavigationBar.dart';
 import 'package:skoola/components/searchField.dart';
-import 'package:skoola/models/course.dart';
+import 'package:skoola/models/course-data.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    void seePreview(Course course) {
+    void seePreview(CourseType course) {
       Navigator.pushNamed(context, "coursePreview");
     }
 
@@ -59,36 +59,36 @@ class Home extends StatelessWidget {
   }
 }
 
-List<Course> courses = [
-  Course(
+List<CourseType> courses = [
+  CourseType(
       cover: "cover.png",
       price: 12.0000,
       title: "UX Design",
       description:
           "You can launch a new career in web develop-ment today by learning HTML & CSS",
       tags: "#ux, #skoola, #benga"),
-  Course(
+  CourseType(
       cover: "cover.png",
       price: 12,
       title: "UX Design",
       description:
           "You can launch a new career in web develop-ment today by learning HTML & CSS",
       tags: "#ux, #skoola, #benga"),
-  Course(
+  CourseType(
       cover: "cover.png",
       price: 12,
       title: "Reactjs Basics",
       description:
           "You can launch a new career in web develop-ment today by learning HTML & CSS",
       tags: "#reacr, #redux, #skoola"),
-  Course(
+  CourseType(
       cover: "cover.png",
       price: 12,
       title: "UI Design",
       description:
           "You can launch a new career in web develop-ment today by learning HTML & CSS",
       tags: "#ux, #skoola, #benga"),
-  Course(
+  CourseType(
       cover: "cover.png",
       price: 12,
       title: "Java Design",

@@ -58,10 +58,17 @@ class Profile extends StatelessWidget {
                   child: Column(
                     children: [
                       ProfileItem(
-                          title: "Courses", icon: "courses", press: null),
-                      ProfileItem(title: "Saved", icon: "courses", press: null),
+                          title: "Courses",
+                          icon: "courses",
+                          press: () => goTo(context, 1)),
                       ProfileItem(
-                          title: "Payment", icon: "courses", press: null)
+                          title: "Saved",
+                          icon: "courses",
+                          press: () => goTo(context, 2)),
+                      ProfileItem(
+                          title: "Payment",
+                          icon: "courses",
+                          press: () => goTo(context, 3))
                     ],
                   ),
                 )
@@ -75,6 +82,28 @@ class Profile extends StatelessWidget {
         initialPage: "profile",
       ),
     );
+  }
+
+  void goTo(BuildContext context, int route) {
+    switch (route) {
+      case 1:
+        {
+          Navigator.pushNamed(context, "myCourses");
+          break;
+        }
+
+      case 2:
+        {
+          // Navigator.pushNamed(context, "myCourses");
+          break;
+        }
+
+      case 3:
+        {
+          // Navigator.pushNamed(context, "myCourses");
+          break;
+        }
+    }
   }
 
   void backHome(BuildContext context) {
@@ -91,51 +120,51 @@ class ProfileItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: Row(
-              children: [
-                Container(
-                  width: 45,
-                  height: 45,
-                  padding: EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xffCCCCCC)),
-                      borderRadius: BorderRadius.circular(100)),
-                  child: SvgPicture.asset(
-                    "assets/icons/$icon.svg",
-                    color: Colors.white,
-                    fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: press,
+      child: Container(
+        margin: EdgeInsets.only(bottom: 15),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              child: Row(
+                children: [
+                  Container(
+                    width: 45,
+                    height: 45,
+                    padding: EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xffCCCCCC)),
+                        borderRadius: BorderRadius.circular(100)),
+                    child: SvgPicture.asset(
+                      "assets/icons/$icon.svg",
+                      color: Colors.white,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 14),
-                  child: Text(title ?? "",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "Rubik-Medium",
-                          fontSize: 20)),
-                )
-              ],
+                  Container(
+                    margin: EdgeInsets.only(left: 14),
+                    child: Text(title ?? "",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Rubik-Medium",
+                            fontSize: 20)),
+                  )
+                ],
+              ),
             ),
-          ),
-          GestureDetector(
-            onTap: press,
-            child: Container(
+            Container(
               padding: EdgeInsets.all(5),
               child: SvgPicture.asset(
                 "assets/icons/next.svg",
                 color: Colors.white,
                 fit: BoxFit.cover,
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

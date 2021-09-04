@@ -67,9 +67,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                 CustomNavigationItem(
                   icon: 'setting',
                   isActive: page == "settings",
-                  title: "Settings",
+                  title: "My courses",
                   press: () => page != "settings"
-                      ? Navigator.pushNamed(context, "settings")
+                      ? Navigator.pushNamed(context, "myCourses")
                       : null,
                 )
               ],
@@ -95,7 +95,6 @@ class CustomNavigationItem extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: Container(
-        width: 65,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

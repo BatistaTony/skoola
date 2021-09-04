@@ -1,8 +1,11 @@
+import 'package:skoola/screens/course/course.dart';
 import 'package:skoola/screens/coursePreview/coursePreview.dart';
 import 'package:skoola/screens/home/home.dart';
 import 'package:skoola/screens/intro/intro.dart';
 import 'package:skoola/screens/login/login.dart';
+import 'package:skoola/screens/myCourses/myCourses.dart';
 import 'package:skoola/screens/profile/profile.dart';
+import 'package:skoola/screens/settings/settings.dart';
 import 'package:skoola/screens/signup/signup.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +32,10 @@ class MyApp extends StatelessWidget {
         "login": (context) => const Login(),
         "signup": (context) => const SignUp(),
         "coursePreview": (context) => const CoursePreview(),
-        "profile": (context) => const Profile()
+        "profile": (context) => const Profile(),
+        "course": (context) => const Course(),
+        "myCourses": (context) => const MyCourses(),
+        "settings": (context) => const Settings()
       },
     );
   }
