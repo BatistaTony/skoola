@@ -94,13 +94,13 @@ class Profile extends StatelessWidget {
 
       case 2:
         {
-          // Navigator.pushNamed(context, "myCourses");
+          Navigator.pushNamed(context, "savedCourses");
           break;
         }
 
       case 3:
         {
-          // Navigator.pushNamed(context, "myCourses");
+          Navigator.pushNamed(context, "payment");
           break;
         }
     }

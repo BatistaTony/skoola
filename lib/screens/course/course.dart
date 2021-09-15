@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:skoola/components/simpleAppBar.dart';
+import 'package:skoola/screens/course/courseContent.dart';
+import 'package:skoola/screens/course/courseTests.dart';
 
 class Course extends StatefulWidget {
   const Course({Key? key}) : super(key: key);
@@ -11,37 +12,66 @@ class Course extends StatefulWidget {
 
 class _CourseState extends State<Course> {
   int tab = 1;
+  final _formsPageViewController = PageController();
 
   @override
   Widget build(BuildContext context) {
+    var titles = ["Lessons", "Tests", "Projects"];
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: SimpleAppBar(title: "Teste here").build(context),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "React Advanced Course with firebase",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Rubik-Medium',
-                          fontSize: 30,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+      appBar: SimpleAppBar(title: titles[tab - 1]).build(context),
+      body: Container(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Container(
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    "React Advanced Course with firebase",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Rubik-Medium',
+                      fontSize: 30,
                     ),
+                    textAlign: TextAlign.left,
                   ),
-                  CourseTopBar(tab: tab, press: switchTab),
-                  CourseIntroduction()
-                ],
-              ),
+                ),
+                CourseTopBar(tab: tab, press: switchTab),
+                // CourseIntroduction()
+                Container(
+                  height: size.height * 0.66,
+                  child: PageView.builder(
+                      allowImplicitScrolling: true,
+                      controller: _formsPageViewController,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        switch (tab) {
+                          case 1:
+                            {
+                              return CourseIntroduction();
+                            }
+
+                          case 2:
+                            {
+                              return CourseTests();
+                            }
+
+                          case 3:
+                            {
+                              return CourseIntroduction();
+                            }
+
+                          default:
+                            {
+                              return CourseIntroduction();
+                            }
+                        }
+                      }),
+                )
+              ],
             ),
           ),
         ),
@@ -50,88 +80,15 @@ class _CourseState extends State<Course> {
   }
 
   void switchTab(value) {
+    _formsPageViewController.nextPage(
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInCubic,
+    );
+
     setState(() {
       tab = value;
     });
   }
-}
-
-class CourseIntroduction extends StatelessWidget {
-  const CourseIntroduction({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var text =
-        "You can launch a new career in web develop-ment today by learning HTML & CSS. You don't need a computer science degree or expensive software. All you need is a computer, a bit of time, a lot of determination, and a teacher you trust.";
-
-    return Container(
-      margin: EdgeInsets.only(top: 30),
-      child: Column(
-        children: [
-          Container(
-              height: 230,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
-                  "assets/images/cover.png",
-                  fit: BoxFit.cover,
-                ),
-              )),
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.only(
-              top: 25,
-            ),
-            child: Text(
-              "Introduction",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Rubik-Medium',
-                fontSize: 25,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            alignment: Alignment.topLeft,
-            child: Text(
-              text,
-              style: TextStyle(
-                  color: Colors.white, fontFamily: 'Rubik', fontSize: 15),
-              textAlign: TextAlign.justify,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 30),
-            child: Column(
-              children: [
-                ProfileTopicItem(
-                  title: "This is a little",
-                  subtitle: "This is a subtitle",
-                  isFinished: true,
-                  press: () => seeTopic,
-                ),
-                ProfileTopicItem(
-                  title: "This is a little",
-                  subtitle: "This is a subtitle",
-                  isFinished: false,
-                  press: () => seeTopic,
-                ),
-                ProfileTopicItem(
-                  title: "This is a little",
-                  subtitle: "This is a subtitle",
-                  isFinished: false,
-                  press: () => seeTopic,
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  void seeTopic(dynamic topic) {}
 }
 
 class CourseTopBar extends StatelessWidget {
@@ -149,16 +106,18 @@ class CourseTopBar extends StatelessWidget {
         children: [
           CourseBarItem(
             side: "left",
-            title: "LESSONS",
+            title: "LESSONS (15)",
             isActive: tab == 1,
-            press: () => press!(1),
+            press: () => tab != 1 ? press!(1) : null,
           ),
           Container(
             width: 1,
             color: Colors.transparent,
           ),
           CourseBarItem(
-              title: "TESTS", isActive: tab == 2, press: () => press!(2)),
+              title: "TESTS",
+              isActive: tab == 2,
+              press: () => tab != 2 ? press!(2) : null),
           Container(
             width: 1,
             color: Colors.transparent,
@@ -167,7 +126,7 @@ class CourseTopBar extends StatelessWidget {
               side: "right",
               isActive: tab == 3,
               title: "PROJECTS",
-              press: () => press!(3))
+              press: () => tab != 3 ? press!(3) : null)
         ],
       ),
     );
@@ -210,94 +169,6 @@ class CourseBarItem extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ProfileTopicItem extends StatelessWidget {
-  final String? title;
-  final String? icon;
-  final String? subtitle;
-  final VoidCallback? press;
-  final bool? isFinished;
-
-  const ProfileTopicItem(
-      {Key? key,
-      this.title,
-      this.icon,
-      this.press,
-      this.subtitle,
-      this.isFinished})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 17),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xffCCCCCC), width: 2),
-                      borderRadius: BorderRadius.circular(100)),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: isFinished ?? false
-                            ? Color(0xff0079F1)
-                            : Color(0xff3F3D56),
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: SvgPicture.asset(
-                          "assets/icons/check.svg",
-                          color: isFinished ?? false
-                              ? Colors.white
-                              : Color(0xff222140),
-                        )),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("this is a title",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Rubik-Medium",
-                              fontSize: 14)),
-                      Text("This is a subtitle",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: "Rubik-Medium",
-                              fontSize: 13)),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: press,
-            child: Container(
-              width: 35,
-              height: 35,
-              padding: EdgeInsets.all(1),
-              child: SvgPicture.asset(
-                "assets/icons/play.svg",
-                color: Colors.white,
-              ),
-            ),
-          )
-        ],
       ),
     );
   }

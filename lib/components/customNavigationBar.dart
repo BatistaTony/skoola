@@ -41,11 +41,19 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomNavigationItem(
-                  icon: 'courses',
+                  icon: 'home',
                   isActive: page == "home",
                   title: "Courses",
                   press: () => page != "home"
                       ? Navigator.pushNamed(context, "home")
+                      : null,
+                ),
+                CustomNavigationItem(
+                  icon: 'courses',
+                  isActive: page == "settings",
+                  title: "My courses",
+                  press: () => page != "settings"
+                      ? Navigator.pushNamed(context, "myCourses")
                       : null,
                 ),
                 CustomNavigationItem(
@@ -64,14 +72,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                       ? Navigator.pushNamed(context, "settings")
                       : null,
                 ),
-                CustomNavigationItem(
-                  icon: 'setting',
-                  isActive: page == "settings",
-                  title: "My courses",
-                  press: () => page != "settings"
-                      ? Navigator.pushNamed(context, "myCourses")
-                      : null,
-                )
               ],
             ),
           ),
