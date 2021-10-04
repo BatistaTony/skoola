@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "393859675523",
+    "project_id": "skoolaapp",
+    "storage_bucket": "skoolaapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393859675523:android:90fe623d1e3b73be01f2b6",
+        "android_client_info": {
+          "package_name": "com.example.skoola"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393859675523-9b01gauqbiup1nlq62p0186l2nkaiok1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkbns1CjpK2enhafeMiiwWNC2Lh2HIoy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393859675523-9b01gauqbiup1nlq62p0186l2nkaiok1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -32,6 +32,12 @@ dependencies:
   flutter_markdown: ^0.6.6
   syntax_highlighter: ^0.1.1
   flutter_highlight: ^0.7.0
+  persistent_bottom_nav_bar: ^4.0.2
+  firebase_core: ^1.7.0
+  firebase_auth: ^3.1.2
+  firebase_storage: ^10.0.4
+  firebase_database: ^8.0.0
+  cloud_firestore: ^2.5.3
 
 dev_dependencies:
   flutter_test:

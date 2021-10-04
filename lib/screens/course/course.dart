@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skoola/components/simpleAppBar.dart';
 import 'package:skoola/screens/course/courseContent.dart';
 import 'package:skoola/screens/course/courseTests.dart';
+import 'package:skoola/screens/projects_screen/projects.dart';
 
 class Course extends StatefulWidget {
   const Course({Key? key}) : super(key: key);
@@ -61,7 +62,7 @@ class _CourseState extends State<Course> {
 
                           case 3:
                             {
-                              return CourseIntroduction();
+                              return Projects();
                             }
 
                           default:
