@@ -17,11 +17,13 @@ import 'package:skoola/screens/testResult/failed.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> firebaseApp = Firebase.initializeApp();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,21 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Rubik',
         primarySwatch: Colors.blue,
       ),
-      home: Intro(),
+      home: FutureBuilder(
+        future: firebaseApp,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print("there is a error ===> " + snapshot.error.toString());
+            return Text("Something wrong with firebase");
+          } else if (snapshot.hasData) {
+            print("connected sucessfully !");
+            return Intro();
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      // home: Intro(),
       routes: {
         "": (context) => const Intro(),
         "home": (context) => const Home(),
