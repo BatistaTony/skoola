@@ -4,8 +4,13 @@ class InputField extends StatelessWidget {
   final Function(String)? inputOnchange;
   final String? placeholder;
   final String? Function(String?)? inputValidator;
+  final bool? isEnabled;
   const InputField(
-      {Key? key, this.inputOnchange, this.placeholder, this.inputValidator})
+      {Key? key,
+      this.isEnabled = true,
+      this.inputOnchange,
+      this.placeholder,
+      this.inputValidator})
       : super(key: key);
 
   @override
@@ -24,6 +29,7 @@ class InputField extends StatelessWidget {
           maxLength: 60,
           textAlignVertical: TextAlignVertical.center,
           onChanged: inputOnchange,
+          enabled: isEnabled,
           style:
               TextStyle(color: Colors.white, fontFamily: 'Rubik', fontSize: 16),
           decoration: InputDecoration(

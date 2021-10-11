@@ -4,8 +4,12 @@ import 'package:flutter_svg/svg.dart';
 class PasswordField extends StatefulWidget {
   final Function(String) inputOnChange;
   final bool? isShowPassword;
+  final bool? isEnabled;
   const PasswordField(
-      {Key? key, required this.inputOnChange, this.isShowPassword = false})
+      {Key? key,
+      required this.inputOnChange,
+      this.isShowPassword = false,
+      this.isEnabled = true})
       : super(key: key);
 
   @override
@@ -41,6 +45,7 @@ class _PasswordFieldState extends State<PasswordField> {
               TextStyle(color: Colors.white, fontFamily: 'Rubik', fontSize: 16),
           obscureText: !isShowPassword!,
           enableSuggestions: false,
+          enabled: widget.isEnabled,
           maxLength: 10,
           autocorrect: false,
           decoration: InputDecoration(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:skoola/components/buttonSocialNetwork.dart';
@@ -5,6 +6,9 @@ import 'package:skoola/components/customButton.dart';
 import 'package:skoola/components/inputField.dart';
 import 'package:skoola/components/outlinedButton.dart';
 import 'package:skoola/components/passwordField.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fzregex/fzregex.dart';
+import 'package:fzregex/utils/pattern.dart';
 import 'package:skoola/screens/home/home.dart';
 
 class SignUp extends StatefulWidget {
@@ -14,10 +18,23 @@ class SignUp extends StatefulWidget {
   _SignUpState createState() => _SignUpState();
 }
 
+class ErrorType {
+  bool status = false;
+  String msg = "";
+  String field = "";
+
+  ErrorType(this.status, this.field, this.msg);
+}
+
 class _SignUpState extends State<SignUp> {
-  String? name;
-  String? email;
-  String? password;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firebaseDb = FirebaseFirestore.instance;
+
+  String name = "";
+  String email = "";
+  String password = "";
+  ErrorType errorForm = ErrorType(false, "", "");
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +98,7 @@ class _SignUpState extends State<SignUp> {
                           margin: EdgeInsets.only(bottom: 20),
                           child: InputField(
                             placeholder: "Name",
+                            isEnabled: !isLoading,
                             inputOnchange: inputOnChangeName,
                           ),
                         ),
@@ -88,21 +106,51 @@ class _SignUpState extends State<SignUp> {
                           margin: EdgeInsets.only(bottom: 20),
                           child: InputField(
                             placeholder: "Email",
+                            isEnabled: !isLoading,
                             inputOnchange: inputOnChangeEmail,
                           ),
                         ),
                         PasswordField(
                           inputOnChange: inputOnChangePassword,
+                          isEnabled: !isLoading,
                           isShowPassword: true,
                         )
                       ],
                     )),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 20),
+                      margin: EdgeInsets.only(top: 10),
+                      child: errorForm.status
+                          ? Text(
+                              errorForm.msg,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                    color: Colors.red,
+                                    fontFamily: 'Rubik-Medium',
+                                    fontSize: 15,
+                                  ),
+                              textAlign: TextAlign.center,
+                            )
+                          : Container()),
+                  Container(
+                    child: isLoading
+                        ? Container(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1.0,
+                              color: Colors.white,
+                            ),
+                          )
+                        : Container(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15),
                     child: ButtonApp(
                       title: "Sign up",
-                      press: signup,
+                      press: isLoading ? () => null : signup,
                     ),
                   ),
                   Container(
@@ -153,7 +201,7 @@ class _SignUpState extends State<SignUp> {
                     margin: EdgeInsets.only(top: 15),
                     child: OutlinedButtonApp(
                       title: "Login",
-                      press: loginPage,
+                      press: isLoading ? () => null : loginPage,
                     ),
                   ),
                 ],
@@ -166,10 +214,49 @@ class _SignUpState extends State<SignUp> {
   }
 
   void loginPage() {
+    setIsError(false, "", "");
+
     Navigator.pushNamed(context, "login");
   }
 
-  void signup() {
+  void signup() async {
+    setIsError(false, "", "");
+
+    CollectionReference<Map<String, dynamic>> usersCollection =
+        firebaseDb.collection("users");
+
+    var emailIsValid = Fzregex.hasMatch(this.email, FzPattern.email);
+    var passwordIsStrong = this.password.length > 6;
+    var nameIsStrong = this.name.length > 5;
+
+    if (emailIsValid && passwordIsStrong && nameIsStrong) {
+      try {
+        setIsLoading(true);
+        var response = await auth.createUserWithEmailAndPassword(
+            email: this.email, password: this.password);
+        var isValidResp = response.user!.email;
+
+        if (isValidResp != "" || isValidResp != null) {
+          usersCollection.doc(this.email).set({"name": this.name});
+          setIsLoading(false);
+          goToHome();
+        }
+      } on FirebaseAuthException catch (err) {
+        setIsLoading(false);
+        handleCodeError(err.code);
+      }
+    } else {
+      if (!nameIsStrong) {
+        setIsError(true, "name", "Name length must be greater tha 5");
+      } else if (!emailIsValid) {
+        setIsError(true, "email", "Nmail is invalid ");
+      } else if (!passwordIsStrong) {
+        setIsError(true, "password", "Password length must be greater tha 6");
+      }
+    }
+  }
+
+  void goToHome() {
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
@@ -179,21 +266,60 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
+  void setIsLoading(bool status) {
+    setState(() {
+      isLoading = status;
+    });
+  }
+
+  void setIsError(bool status, String field, String msg) {
+    setIsLoading(false);
+
+    setState(() {
+      errorForm.status = status;
+      errorForm.msg = msg;
+      errorForm.field = field;
+    });
+  }
+
+  void handleCodeError(String code) {
+    if (code == "email-already-exists" || code == "email-already-in-use") {
+      setIsError(true, "email",
+          "The email address is already in use by another account.");
+    } else if (code == "auth/invalid-password") {
+      setIsError(true, "email",
+          "The email address is already in use by another account.");
+    } else if (code.length > 0) {
+      setIsError(true, "", "There something wrong, try again !");
+    }
+  }
+
   void forgetPassword() {}
 
   void inputOnChangeEmail(String value) {
+    if (errorForm.field == "email") {
+      setIsError(false, "", "");
+    }
+
     setState(() {
       email = value;
     });
   }
 
   void inputOnChangeName(String value) {
+    if (errorForm.field == "name") {
+      setIsError(false, "", "");
+    }
+
     setState(() {
       name = value;
     });
   }
 
   void inputOnChangePassword(String value) {
+    if (errorForm.field == "password") {
+      setIsError(false, "", "");
+    }
     setState(() {
       password = value;
     });

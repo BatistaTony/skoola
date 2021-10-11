@@ -1,8 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:skoola/components/customButton.dart';
+import 'package:skoola/models/data.dart';
+import 'package:skoola/screens/home/home.dart';
 import 'package:skoola/screens/login/login.dart';
-
+import 'package:skoola/store/actions/user.dart';
+import 'package:skoola/store/app_state.dart';
 import 'data.dart';
 
 class Intro extends StatefulWidget {
@@ -15,6 +22,37 @@ class Intro extends StatefulWidget {
 class _IntroState extends State<Intro> {
   int introScreen = 1;
   final _formsPageViewController = PageController();
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseFirestore firebaseDb = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!
+        .addPostFrameCallback((_) => checkIsLogged(context));
+  }
+
+  void checkIsLogged(context) async {
+    Store<AppState> store = StoreProvider.of<AppState>(context);
+    var isAlreadyOnState = store.state.user!.id;
+
+    var users = firebaseDb.collection("users");
+    var isLogged = firebaseAuth.currentUser!.email;
+
+    if (isLogged != null) {
+      var user = (await users.doc(isLogged).get());
+      Map<String, dynamic> userObj = user.data() as Map<String, dynamic>;
+
+      if (isAlreadyOnState != "") {
+        goToHomeCourses();
+      } else {
+        UserEntity userState =
+            new UserEntity(user.id, "", "Angola", isLogged, userObj["name"]);
+        store.dispatch(SetUser(userState));
+        goToHomeCourses();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +126,16 @@ class _IntroState extends State<Intro> {
 
   void skipIntro() {
     goToHome();
+  }
+
+  void goToHomeCourses() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => Home(),
+      ),
+      (route) => false,
+    );
   }
 
   void nextScreen() {

@@ -16,10 +16,11 @@ class CourseEntity {
 class UserEntity {
   String? id;
   String? name;
-  DateTime? birthDate;
   String? country;
   String? avatar;
   String? email;
+
+  UserEntity(this.id, this.avatar, this.country, this.email, this.name);
 }
 
 class SavedCourseEntity {
