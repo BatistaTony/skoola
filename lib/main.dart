@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
             "profile": (context) => const Profile(),
             "course": (context) => const Course(),
             "myCourses": (context) => const MyCourses(),
-            "settings": (context) => const Settings(),
+            "settings": (context) => Settings(),
             "payment": (context) => const Payment(),
             "courseLesson": (context) => const CourseLesson(),
             "savedCourses": (context) => const SavedCourses(),

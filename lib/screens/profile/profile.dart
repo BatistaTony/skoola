@@ -77,10 +77,10 @@ class Profile extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomNavigationBar(
-        navigateTo: (page) => print(page),
-        initialPage: "profile",
-      ),
+      // bottomNavigationBar: CustomNavigationBar(
+      //   navigateTo: (page) => print(page),
+      //   initialPage: "profile",
+      // ),
     );
   }
 

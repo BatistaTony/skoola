@@ -3,8 +3,8 @@ import 'package:flutter_svg/svg.dart';
 
 class CustomNavigationBar extends StatefulWidget {
   final Function(String)? navigateTo;
-  final String? initialPage;
-  const CustomNavigationBar({Key? key, this.navigateTo, this.initialPage})
+  final String? page;
+  const CustomNavigationBar({Key? key, this.navigateTo, this.page})
       : super(key: key);
 
   @override
@@ -18,9 +18,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   void initState() {
     super.initState();
     setState(() {
-      page = widget.initialPage!;
+      page = widget.page!;
     });
-    print(page);
   }
 
   @override
@@ -44,33 +43,28 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
                   icon: 'home',
                   isActive: page == "home",
                   title: "Courses",
-                  press: () => page != "home"
-                      ? Navigator.pushNamed(context, "home")
-                      : null,
+                  press: () => page != "home" ? navigateToPage("home") : null,
                 ),
                 CustomNavigationItem(
                   icon: 'courses',
-                  isActive: page == "settings",
+                  isActive: page == "myCourses",
                   title: "My courses",
-                  press: () => page != "settings"
-                      ? Navigator.pushNamed(context, "myCourses")
-                      : null,
+                  press: () =>
+                      page != "myCourses" ? navigateToPage("myCourses") : null,
                 ),
                 CustomNavigationItem(
                   icon: 'profile',
                   isActive: page == "profile",
                   title: "Profile",
-                  press: () => page != "profile"
-                      ? Navigator.pushNamed(context, "profile")
-                      : null,
+                  press: () =>
+                      page != "profile" ? navigateToPage("profile") : null,
                 ),
                 CustomNavigationItem(
                   icon: 'setting',
                   isActive: page == "settings",
                   title: "Settings",
-                  press: () => page != "settings"
-                      ? Navigator.pushNamed(context, "settings")
-                      : null,
+                  press: () =>
+                      page != "settings" ? navigateToPage("settings") : null,
                 ),
               ],
             ),
@@ -78,6 +72,13 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
         ),
       ),
     );
+  }
+
+  void navigateToPage(String pageName) {
+    widget.navigateTo!(pageName);
+    setState(() {
+      page = pageName;
+    });
   }
 }
 
