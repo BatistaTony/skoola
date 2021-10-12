@@ -34,22 +34,26 @@ class _IntroState extends State<Intro> {
 
   void checkIsLogged(context) async {
     Store<AppState> store = StoreProvider.of<AppState>(context);
-    var isAlreadyOnState = store.state.user!.id;
+    var isAlreadyOnState = store.state.user?.id;
 
     var users = firebaseDb.collection("users");
-    var isLogged = firebaseAuth.currentUser!.email;
+    var isLogged = firebaseAuth.currentUser?.email;
 
     if (isLogged != null) {
-      var user = (await users.doc(isLogged).get());
-      Map<String, dynamic> userObj = user.data() as Map<String, dynamic>;
+      try {
+        var user = (await users.doc(isLogged).get());
+        Map<String, dynamic> userObj = user.data() as Map<String, dynamic>;
 
-      if (isAlreadyOnState != "") {
-        goToHomeCourses();
-      } else {
-        UserEntity userState =
-            new UserEntity(user.id, "", "Angola", isLogged, userObj["name"]);
-        store.dispatch(SetUser(userState));
-        goToHomeCourses();
+        if (isAlreadyOnState != null) {
+          goToHomeCourses();
+        } else {
+          UserEntity userState =
+              new UserEntity(user.id, "", "Angola", isLogged, userObj["name"]);
+          store.dispatch(SetUser(userState));
+          goToHomeCourses();
+        }
+      } catch (err) {
+        print("something goes wrong !");
       }
     }
   }

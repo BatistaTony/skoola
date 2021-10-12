@@ -70,3 +70,11 @@ class QuestionEntity {
   int? rightQuestionId;
   int? questionScore;
 }
+
+class ErrorType {
+  bool status = false;
+  String msg = "";
+  String field = "";
+
+  ErrorType(this.status, this.field, this.msg);
+}

@@ -9,6 +9,7 @@ import 'package:skoola/components/passwordField.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fzregex/fzregex.dart';
 import 'package:fzregex/utils/pattern.dart';
+import 'package:skoola/models/data.dart';
 import 'package:skoola/screens/home/home.dart';
 
 class SignUp extends StatefulWidget {
@@ -16,14 +17,6 @@ class SignUp extends StatefulWidget {
 
   @override
   _SignUpState createState() => _SignUpState();
-}
-
-class ErrorType {
-  bool status = false;
-  String msg = "";
-  String field = "";
-
-  ErrorType(this.status, this.field, this.msg);
 }
 
 class _SignUpState extends State<SignUp> {
@@ -293,8 +286,6 @@ class _SignUpState extends State<SignUp> {
       setIsError(true, "", "There something wrong, try again !");
     }
   }
-
-  void forgetPassword() {}
 
   void inputOnChangeEmail(String value) {
     if (errorForm.field == "email") {
