@@ -44,7 +44,8 @@ class _IntroState extends State<Intro> {
         var user = (await users.doc(isLogged).get());
         Map<String, dynamic> userObj = user.data() as Map<String, dynamic>;
 
-        if (isAlreadyOnState != null) {
+        if (isAlreadyOnState != "") {
+          print(isAlreadyOnState);
           goToHomeCourses();
         } else {
           UserEntity userState =

@@ -134,7 +134,7 @@ class ProfileItem extends StatelessWidget {
                   Container(
                     width: 45,
                     height: 45,
-                    padding: EdgeInsets.all(14),
+                    padding: EdgeInsets.all(13),
                     decoration: BoxDecoration(
                         border: Border.all(color: Color(0xffCCCCCC)),
                         borderRadius: BorderRadius.circular(100)),
