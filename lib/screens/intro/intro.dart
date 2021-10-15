@@ -24,10 +24,14 @@ class _IntroState extends State<Intro> {
   final _formsPageViewController = PageController();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseFirestore firebaseDb = FirebaseFirestore.instance;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      isLoading = true;
+    });
     WidgetsBinding.instance!
         .addPostFrameCallback((_) => checkIsLogged(context));
   }
@@ -40,6 +44,9 @@ class _IntroState extends State<Intro> {
     var isLogged = firebaseAuth.currentUser?.email;
 
     if (isLogged != null) {
+      setState(() {
+        isLoading = true;
+      });
       try {
         var user = (await users.doc(isLogged).get());
         Map<String, dynamic> userObj = user.data() as Map<String, dynamic>;
@@ -47,13 +54,23 @@ class _IntroState extends State<Intro> {
         if (isAlreadyOnState != "") {
           print(isAlreadyOnState);
           goToHomeCourses();
+          // setState(() {
+          //   isLoading = false;
+          // });
         } else {
           UserEntity userState =
               new UserEntity(user.id, "", "Angola", isLogged, userObj["name"]);
           store.dispatch(SetUser(userState));
+
           goToHomeCourses();
+          // setState(() {
+          //   isLoading = false;
+          // });
         }
       } catch (err) {
+        setState(() {
+          isLoading = false;
+        });
         print("something goes wrong !");
       }
     }
@@ -61,6 +78,7 @@ class _IntroState extends State<Intro> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -84,36 +102,51 @@ class _IntroState extends State<Intro> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.80,
-            alignment: Alignment.bottomLeft,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 390,
-                  child: PageView.builder(
-                      controller: _formsPageViewController,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return ContentIntro(
-                          content: introDatas[index],
-                        );
-                      }),
+          child: !isLoading
+              ? Container(
+                  height: MediaQuery.of(context).size.height * 0.80,
+                  alignment: Alignment.bottomLeft,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 390,
+                        child: PageView.builder(
+                            controller: _formsPageViewController,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return ContentIntro(
+                                content: introDatas[index],
+                              );
+                            }),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(top: 5),
+                          alignment: Alignment.center,
+                          child: PaginationIntro(
+                            introScreenNum: introScreen,
+                          )),
+                      Container(
+                          margin: EdgeInsets.only(top: 80),
+                          child: ButtonApp(
+                              title: "Next", press: () => nextScreen())),
+                    ],
+                  ),
+                )
+              : Container(
+                  height: size.height * 0.80,
+                  child: Center(
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 1.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-                Container(
-                    margin: EdgeInsets.only(top: 5),
-                    alignment: Alignment.center,
-                    child: PaginationIntro(
-                      introScreenNum: introScreen,
-                    )),
-                Container(
-                    margin: EdgeInsets.only(top: 80),
-                    child: ButtonApp(title: "Next", press: () => nextScreen())),
-              ],
-            ),
-          ),
         ),
       ),
     );
