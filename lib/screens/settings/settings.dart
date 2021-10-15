@@ -18,7 +18,10 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SimpleAppBar(title: "Settings").build(context),
+      appBar: SimpleAppBar(
+        title: "Settings",
+        isCanForward: false,
+      ).build(context),
       body: Container(
         padding: EdgeInsets.all(20),
         child: Column(

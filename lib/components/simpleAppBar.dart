@@ -4,7 +4,10 @@ import 'package:flutter_svg/svg.dart';
 class SimpleAppBar extends StatelessWidget {
   final String? title;
   final VoidCallback? goBackFunc;
-  const SimpleAppBar({Key? key, this.title, this.goBackFunc}) : super(key: key);
+  final bool isCanForward;
+  const SimpleAppBar(
+      {Key? key, this.title, this.goBackFunc, this.isCanForward = true})
+      : super(key: key);
 
   @override
   PreferredSizeWidget build(BuildContext context) {
@@ -20,18 +23,22 @@ class SimpleAppBar extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: GestureDetector(
-          onTap: goBack,
-          child: Container(
-            width: 15,
-            height: 15,
-            padding: EdgeInsets.all(19),
-            child: SvgPicture.asset(
-              "assets/icons/back.svg",
-            ),
-          ),
+          onTap: isCanForward ? goBack : null,
+          child: isCanForward
+              ? Container(
+                  width: 15,
+                  height: 15,
+                  padding: EdgeInsets.all(19),
+                  child: SvgPicture.asset(
+                    "assets/icons/back.svg",
+                  ),
+                )
+              : null,
         ),
-        title: Text(title ?? "",
-            style:
-                TextStyle(color: Colors.white, fontFamily: 'Rubki-SemiBold')));
+        title: Center(
+          child: Text(title ?? "",
+              style:
+                  TextStyle(color: Colors.white, fontFamily: 'Rubki-SemiBold')),
+        ));
   }
 }

@@ -16,6 +16,7 @@ class _MyCoursesState extends State<MyCourses> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SimpleAppBar(
+        isCanForward: false,
         title: "My courses",
       ).build(context),
       body: SingleChildScrollView(

@@ -11,7 +11,10 @@ class Profile extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: SimpleAppBar(title: "Profile").build(context),
+      appBar: SimpleAppBar(
+        title: "Profile",
+        isCanForward: false,
+      ).build(context),
       body: Container(
         width: size.width,
         child: Padding(
