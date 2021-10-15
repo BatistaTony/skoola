@@ -35,10 +35,9 @@ class SimpleAppBar extends StatelessWidget {
                 )
               : null,
         ),
-        title: Center(
-          child: Text(title ?? "",
-              style:
-                  TextStyle(color: Colors.white, fontFamily: 'Rubki-SemiBold')),
-        ));
+        centerTitle: true,
+        title: Text(title ?? "",
+            style:
+                TextStyle(color: Colors.white, fontFamily: 'Rubki-SemiBold')));
   }
 }
