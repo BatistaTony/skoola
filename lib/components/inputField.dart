@@ -4,13 +4,15 @@ class InputField extends StatelessWidget {
   final Function(String)? inputOnchange;
   final String? placeholder;
   final String? Function(String?)? inputValidator;
+  final String? value;
   final bool? isEnabled;
   const InputField(
       {Key? key,
       this.isEnabled = true,
       this.inputOnchange,
       this.placeholder,
-      this.inputValidator})
+      this.inputValidator,
+      this.value})
       : super(key: key);
 
   @override
@@ -26,6 +28,7 @@ class InputField extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(left: 15),
         child: TextFormField(
+          initialValue: value != null ? value : "",
           maxLength: 60,
           textAlignVertical: TextAlignVertical.center,
           onChanged: inputOnchange,
