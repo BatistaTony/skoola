@@ -7,6 +7,8 @@ import 'package:skoola/components/customButton.dart';
 import 'package:skoola/components/simpleAppBar.dart';
 import 'package:skoola/components/switch.dart';
 import 'package:skoola/screens/login/login.dart';
+import 'package:skoola/screens/settings/modalEmail.dart';
+import 'package:skoola/screens/settings/modalName.dart';
 import 'package:skoola/store/actions/user.dart';
 import 'package:skoola/store/app_state.dart';
 
@@ -58,9 +60,11 @@ class Settings extends StatelessWidget {
 
 class SettingMenu extends StatelessWidget {
   const SettingMenu({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    Store<AppState> store = StoreProvider.of(context);
+    var userState = store.state.user;
+
     return Column(
       children: [
         NotificationContainer(),
@@ -75,15 +79,27 @@ class SettingMenu extends StatelessWidget {
         ),
         SettingMenuItem(
           icon: "courses",
-          press: () => {},
+          press: () => showModalBottomSheet(
+              isDismissible: false,
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) {
+                return NameSetting();
+              }),
           title: "Name",
-          subTitle: "Some name",
+          subTitle: userState!.name,
         ),
         SettingMenuItem(
           icon: "courses",
-          press: () => {},
+          press: () => showModalBottomSheet(
+              isDismissible: false,
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) {
+                return EmailSetting();
+              }),
           title: "Email",
-          subTitle: "Some@name.com",
+          subTitle: userState.email,
         ),
         SettingMenuItem(
           icon: "courses",
