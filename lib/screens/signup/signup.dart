@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:redux/redux.dart';
 import 'package:skoola/components/buttonSocialNetwork.dart';
 import 'package:skoola/components/customButton.dart';
 import 'package:skoola/components/inputField.dart';
@@ -11,6 +13,8 @@ import 'package:fzregex/fzregex.dart';
 import 'package:fzregex/utils/pattern.dart';
 import 'package:skoola/models/data.dart';
 import 'package:skoola/screens/home/home.dart';
+import 'package:skoola/store/actions/user.dart';
+import 'package:skoola/store/app_state.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -223,6 +227,8 @@ class _SignUpState extends State<SignUp> {
     var nameIsStrong = this.name.length > 5;
 
     if (emailIsValid && passwordIsStrong && nameIsStrong) {
+      Store<AppState> store = StoreProvider.of<AppState>(context);
+
       try {
         setIsLoading(true);
         var response = await auth.createUserWithEmailAndPassword(
@@ -230,7 +236,16 @@ class _SignUpState extends State<SignUp> {
         var isValidResp = response.user!.email;
 
         if (isValidResp != "" || isValidResp != null) {
-          usersCollection.doc(this.email).set({"name": this.name});
+          var userId = response.user!.uid;
+          usersCollection.doc(userId).set({
+            "name": this.name,
+            "country": "",
+            "avatar": "",
+            "email": this.email
+          });
+          UserEntity userState =
+              new UserEntity(userId, "", "", this.email, this.name);
+          store.dispatch(SetUser(userState));
           setIsLoading(false);
           goToHome();
         }

@@ -213,11 +213,13 @@ class _LoginState extends State<Login> {
 
         if (isValidResp != "" || isValidResp != null) {
           setIsLoading(false);
-          var user = (await users.doc(this.email).get());
+          var userId = response.user!.uid;
+
+          var user = (await users.doc(userId).get());
           Map<String, dynamic> userObj = user.data() as Map<String, dynamic>;
 
           UserEntity userState = new UserEntity(
-              user.id, "", "Angola", this.email, userObj["name"]);
+              userId, "", user["country"], this.email, userObj["name"]);
           store.dispatch(SetUser(userState));
           goToHome();
         }
