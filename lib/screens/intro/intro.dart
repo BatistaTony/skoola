@@ -63,9 +63,6 @@ class _IntroState extends State<Intro> {
           store.dispatch(SetUser(userState));
 
           goToHomeCourses();
-          // setState(() {
-          //   isLoading = false;
-          // });
         }
       } catch (err) {
         setState(() {
@@ -73,6 +70,10 @@ class _IntroState extends State<Intro> {
         });
         print("something goes wrong !");
       }
+    } else {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
