@@ -4,12 +4,17 @@ class ButtonApp extends StatelessWidget {
   final String? title;
   final VoidCallback? press;
   final bool? isDisabled;
-  const ButtonApp({Key? key, this.title, this.press, this.isDisabled = false})
+  final Color? bgColor;
+  const ButtonApp(
+      {Key? key, this.title, this.press, this.isDisabled = false, this.bgColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    var disbaledColor = Color(0xffB4C0CC);
+    var normalColor = bgColor != null ? bgColor : Color(0xff0079F1);
 
     return GestureDetector(
       onTap: press,
@@ -17,7 +22,7 @@ class ButtonApp extends StatelessWidget {
         height: size.height < 800.0 ? 50 : 56,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: isDisabled! ? Color(0xffB4C0CC) : Color(0xff0079F1),
+            color: isDisabled! ? disbaledColor : normalColor,
             borderRadius: BorderRadius.circular(15)),
         child: Text(
           title ?? "",
