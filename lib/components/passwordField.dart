@@ -5,11 +5,13 @@ class PasswordField extends StatefulWidget {
   final Function(String) inputOnChange;
   final bool? isShowPassword;
   final bool? isEnabled;
+  final String? placeholder;
   const PasswordField(
       {Key? key,
       required this.inputOnChange,
       this.isShowPassword = false,
-      this.isEnabled = true})
+      this.isEnabled = true,
+      this.placeholder})
       : super(key: key);
 
   @override
@@ -67,7 +69,8 @@ class _PasswordFieldState extends State<PasswordField> {
                   ),
                 ),
               ),
-              hintText: "Password",
+              hintText:
+                  widget.placeholder != null ? widget.placeholder : "Password",
               hintStyle: TextStyle(color: Color(0xffBEBAB3))),
         ),
       ),

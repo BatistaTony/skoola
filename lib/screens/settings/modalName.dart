@@ -4,7 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:skoola/components/inputField.dart';
 import 'package:skoola/models/data.dart';
-import 'package:skoola/screens/settings/modalSetting.dart';
+import 'package:skoola/components/modalSetting.dart';
 import 'package:skoola/store/actions/user.dart';
 import 'package:skoola/store/app_state.dart';
 
@@ -27,7 +27,7 @@ class _NameSettingState extends State<NameSetting> {
     UserEntity? userState = store.state.user;
     return ModalSetting(
       isLoading: isLoading,
-      onUpdate: () => updateName(userState!.email ?? "", context),
+      onUpdate: () => updateName(userState!.id ?? "", context),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,8 +118,8 @@ class _NameSettingState extends State<NameSetting> {
       var newUser = user;
       newUser["name"] = name;
       await users.doc(userId).set(newUser).then((value) {
-        UserEntity userState = new UserEntity(
-            response.id, "", "Angola", response.id, newUser["name"]);
+        UserEntity userState =
+            new UserEntity(userId, "", "", newUser["email"], newUser["name"]);
         store.dispatch(SetUser(userState));
         Navigator.pop(context, false);
         setIsLoading(false);

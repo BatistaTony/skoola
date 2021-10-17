@@ -41,14 +41,14 @@ class _IntroState extends State<Intro> {
     var isAlreadyOnState = store.state.user?.id;
 
     var users = firebaseDb.collection("users");
-    var isLogged = firebaseAuth.currentUser?.email;
+    var userId = firebaseAuth.currentUser?.uid;
 
-    if (isLogged != null) {
+    if (userId != null) {
       setState(() {
         isLoading = true;
       });
       try {
-        var user = (await users.doc(isLogged).get());
+        var user = (await users.doc(userId).get());
         Map<String, dynamic> userObj = user.data() as Map<String, dynamic>;
 
         if (isAlreadyOnState != "") {
@@ -58,8 +58,8 @@ class _IntroState extends State<Intro> {
           //   isLoading = false;
           // });
         } else {
-          UserEntity userState =
-              new UserEntity(user.id, "", "Angola", isLogged, userObj["name"]);
+          UserEntity userState = new UserEntity(
+              userId, "", "Angola", userObj["email"], userObj["name"]);
           store.dispatch(SetUser(userState));
 
           goToHomeCourses();

@@ -1,14 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:redux/redux.dart';
-import 'package:skoola/components/customButton.dart';
 import 'package:skoola/components/simpleAppBar.dart';
 import 'package:skoola/components/switch.dart';
 import 'package:skoola/screens/login/login.dart';
 import 'package:skoola/screens/settings/modalEmail.dart';
 import 'package:skoola/screens/settings/modalName.dart';
+import 'package:skoola/screens/settings/modalPassword.dart';
 import 'package:skoola/store/actions/user.dart';
 import 'package:skoola/store/app_state.dart';
 
@@ -58,13 +59,18 @@ class Settings extends StatelessWidget {
   }
 }
 
-class SettingMenu extends StatelessWidget {
+class SettingMenu extends StatefulWidget {
   const SettingMenu({Key? key}) : super(key: key);
+
+  @override
+  _SettingMenuState createState() => _SettingMenuState();
+}
+
+class _SettingMenuState extends State<SettingMenu> {
   @override
   Widget build(BuildContext context) {
     Store<AppState> store = StoreProvider.of(context);
     var userState = store.state.user;
-
     return Column(
       children: [
         NotificationContainer(),
@@ -85,7 +91,9 @@ class SettingMenu extends StatelessWidget {
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) {
                 return NameSetting();
-              }),
+              }).then((_) {
+            setState(() {});
+          }),
           title: "Name",
           subTitle: userState!.name,
         ),
@@ -97,13 +105,23 @@ class SettingMenu extends StatelessWidget {
               backgroundColor: Colors.transparent,
               builder: (BuildContext context) {
                 return EmailSetting();
-              }),
+              }).then((_) {
+            setState(() {});
+          }),
           title: "Email",
           subTitle: userState.email,
         ),
         SettingMenuItem(
           icon: "courses",
-          press: () => {},
+          press: () => showModalBottomSheet(
+              isDismissible: false,
+              context: context,
+              backgroundColor: Colors.transparent,
+              builder: (BuildContext context) {
+                return PasswordSetting();
+              }).then((_) {
+            setState(() {});
+          }),
           title: "Password",
           subTitle: "****************",
         ),
@@ -111,6 +129,68 @@ class SettingMenu extends StatelessWidget {
     );
   }
 }
+
+// class SettingMenu extends StatelessWidget {
+//   const SettingMenu({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Store<AppState> store = StoreProvider.of(context);
+//     var userState = store.state.user;
+//     return Column(
+//       children: [
+//         NotificationContainer(),
+//         Container(
+//           alignment: Alignment.topLeft,
+//           margin: EdgeInsets.only(bottom: 15, top: 20),
+//           child: Text("Account Information",
+//               style: TextStyle(
+//                   color: Colors.white,
+//                   fontFamily: "Rubik-Medium",
+//                   fontSize: 19)),
+//         ),
+//         SettingMenuItem(
+//           icon: "courses",
+//           press: () => showModalBottomSheet(
+//               isDismissible: false,
+//               context: context,
+//               backgroundColor: Colors.transparent,
+//               builder: (BuildContext context) {
+//                 return NameSetting();
+//               }).then((_) {
+//             print("close");
+//           }),
+//           title: "Name",
+//           subTitle: userState!.name,
+//         ),
+//         SettingMenuItem(
+//           icon: "courses",
+//           press: () => showModalBottomSheet(
+//               isDismissible: false,
+//               context: context,
+//               backgroundColor: Colors.transparent,
+//               builder: (BuildContext context) {
+//                 return EmailSetting();
+//               }),
+//           title: "Email",
+//           subTitle: userState.email,
+//         ),
+//         SettingMenuItem(
+//           icon: "courses",
+//           press: () => showModalBottomSheet(
+//               isDismissible: false,
+//               context: context,
+//               backgroundColor: Colors.transparent,
+//               builder: (BuildContext context) {
+//                 return PasswordSetting();
+//               }),
+//           title: "Password",
+//           subTitle: "****************",
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 class SettingMenuItem extends StatelessWidget {
   final String? title;

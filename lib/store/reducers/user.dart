@@ -10,6 +10,5 @@ AppState reducer(AppState prevState, dynamic action) {
   } else if (action is LogOut) {
     newState.user = new UserEntity("", "", "", "", "");
   }
-
   return newState;
 }

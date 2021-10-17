@@ -9,21 +9,21 @@ import 'package:skoola/components/inputField.dart';
 import 'package:skoola/components/passwordField.dart';
 import 'package:skoola/models/data.dart';
 import 'package:skoola/components/modalSetting.dart';
-import 'package:skoola/store/actions/user.dart';
 import 'package:skoola/store/app_state.dart';
 
-class EmailSetting extends StatefulWidget {
-  const EmailSetting({Key? key}) : super(key: key);
+class PasswordSetting extends StatefulWidget {
+  const PasswordSetting({Key? key}) : super(key: key);
 
   @override
-  _EmailSettingState createState() => _EmailSettingState();
+  _PasswordSettingState createState() => _PasswordSettingState();
 }
 
-class _EmailSettingState extends State<EmailSetting> {
+class _PasswordSettingState extends State<PasswordSetting> {
   String email = "";
-  String password = "";
+  String newPassword = "";
+  String oldPassword = "";
+
   String erroTxt = "";
-  String oldEmail = "";
   bool isLoading = false;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   FirebaseFirestore firebaseDb = FirebaseFirestore.instance;
@@ -38,7 +38,7 @@ class _EmailSettingState extends State<EmailSetting> {
   void updateOldEmail(context) {
     Store<AppState> store = StoreProvider.of<AppState>(context);
     setState(() {
-      oldEmail = store.state.user!.email!;
+      email = store.state.user!.email!;
     });
   }
 
@@ -49,7 +49,7 @@ class _EmailSettingState extends State<EmailSetting> {
     return ModalSetting(
       height: 0.55,
       isLoading: isLoading,
-      onUpdate: () => updateEmail(context),
+      onUpdate: () => updatePassword(context),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,24 +69,25 @@ class _EmailSettingState extends State<EmailSetting> {
               margin: EdgeInsets.only(bottom: 20),
               child: InputField(
                 value: userState!.email,
-                placeholder: "Email",
+                placeholder: "old",
                 isEnabled: true,
-                inputOnchange: inputOnChangeOldEmail,
+                inputOnchange: inputOnChangeEmail,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: PasswordField(
+                placeholder: "Old password",
+                inputOnChange: inputOnChangeOldPassword,
+                isEnabled: !isLoading,
+                isShowPassword: false,
               ),
             ),
             PasswordField(
-              inputOnChange: inputOnChangePassword,
+              placeholder: "New password",
+              inputOnChange: inputOnChangeNewPassword,
               isEnabled: !isLoading,
               isShowPassword: false,
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 20),
-              child: InputField(
-                value: "",
-                placeholder: "New email",
-                isEnabled: !isLoading,
-                inputOnchange: inputOnChangeEmail,
-              ),
             ),
             Container(
               margin: EdgeInsets.only(top: 20),
@@ -129,17 +130,19 @@ class _EmailSettingState extends State<EmailSetting> {
     });
   }
 
-  void inputOnChangeOldEmail(String value) {
-    setState(() {
-      oldEmail = value;
-    });
-  }
-
-  void inputOnChangePassword(String value) {
+  void inputOnChangeOldPassword(String value) {
     setErrorTxt("");
 
     setState(() {
-      password = value;
+      oldPassword = value;
+    });
+  }
+
+  void inputOnChangeNewPassword(String value) {
+    setErrorTxt("");
+
+    setState(() {
+      newPassword = value;
     });
   }
 
@@ -155,73 +158,39 @@ class _EmailSettingState extends State<EmailSetting> {
     });
   }
 
-  Future<String> updateData() async {
-    print("something to update here ..... ====> ");
-    Store<AppState> store = StoreProvider.of<AppState>(context);
-    var users = firebaseDb.collection("users");
-    var userId = store.state.user?.id;
-    var user = (await users.doc(userId).get());
-    Map<String, dynamic> userObj = user.data() as Map<String, dynamic>;
-
-    await users.doc(userId).set({
-      "email": email,
-      "avatar": "",
-      "country": "",
-      "name": userObj["name"]
-    }).then((value) => print("sucessfully saved ! $email"));
-
-    UserEntity userState =
-        new UserEntity(user.id, "", "Angola", email, userObj["name"]);
-    store.dispatch(SetUser(userState));
-
-    return "sucess";
-  }
-
-  void updateEmail(dynamic context) async {
-    if (email == "") return;
-
+  void updatePassword(dynamic context) async {
+    setIsLoading(false);
     setErrorTxt("");
-    var emailIsValid = Fzregex.hasMatch(oldEmail, FzPattern.email);
-    var passwordIsStrong = this.password.length > 5;
+    var emailIsValid = Fzregex.hasMatch(email, FzPattern.email);
+    var passwordIsStrong = this.oldPassword.length > 5;
+    var newPasswordIsStrong = this.newPassword.length > 5;
 
-    if (emailIsValid && passwordIsStrong) {
+    if (emailIsValid && passwordIsStrong && newPasswordIsStrong) {
       try {
         setIsLoading(true);
         var response = await firebaseAuth.signInWithEmailAndPassword(
-            email: oldEmail, password: this.password);
+            email: email, password: this.oldPassword);
         var isValidResp = response.user!.email;
 
         if (isValidResp != "" || isValidResp != null) {
-          response.user?.updateEmail(email).then((value) {
-            updateData().then((value) {
-              if (value == "sucess") {
-                Navigator.pop(context, false);
-                setIsLoading(false);
-              }
-            });
+          response.user?.updatePassword(newPassword).then((value) {
+            Navigator.pop(context, false);
+            setIsLoading(false);
           });
         }
       } on FirebaseAuthException catch (err) {
-        print("the error occurred ===> $err");
-        handError(err.code);
+        print(err.credential);
+        setErrorTxt("something went wrong, try again");
         setIsLoading(false);
       }
     } else {
       if (!emailIsValid) {
         setErrorTxt("Email is invalid ");
       } else if (!passwordIsStrong) {
-        setErrorTxt("Password length must be greater tha 6");
+        setErrorTxt("Old password length must be greater tha 6");
+      } else if (!newPasswordIsStrong) {
+        setErrorTxt("New password length must be greater tha 6");
       }
-    }
-  }
-
-  void handError(String code) {
-    print("the error code $code");
-
-    if (code == "wrong-password") {
-      setErrorTxt("User not found !");
-    } else if (code == "too-many-requests") {
-      setErrorTxt("Too many requests, try again later !");
     }
   }
 }
