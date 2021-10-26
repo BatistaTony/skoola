@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:redux/redux.dart';
 import 'package:skoola/components/customNavigationBar.dart';
 import 'package:skoola/components/simpleAppBar.dart';
+import 'package:skoola/screens/course/course.dart';
+import 'package:skoola/screens/myCourses/myCourses.dart';
+import 'package:skoola/store/app_state.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Store<AppState> store = StoreProvider.of(context);
+    var userState = store.state.user;
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: SimpleAppBar(
         title: "Profile",
-        isCanForward: false,
+        canBack: false,
       ).build(context),
       body: Container(
         width: size.width,
@@ -39,7 +46,7 @@ class Profile extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.only(top: 13),
                       child: Text(
-                        "Batista Oliveira",
+                        userState!.name ?? "User name",
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: "Rubik-Medium",
@@ -48,7 +55,7 @@ class Profile extends StatelessWidget {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 1.5),
-                      child: Text("batistatomeoliveira96@gmail.com",
+                      child: Text(userState.email ?? "fake@email.skoola",
                           style: TextStyle(
                               color: Color(0xff8A8A90),
                               fontFamily: "Rubik",
@@ -91,7 +98,12 @@ class Profile extends StatelessWidget {
     switch (route) {
       case 1:
         {
-          Navigator.pushNamed(context, "myCourses");
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const MyCourses(
+                        canBack: true,
+                      )));
           break;
         }
 
