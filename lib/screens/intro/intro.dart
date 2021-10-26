@@ -86,18 +86,20 @@ class _IntroState extends State<Intro> {
         backgroundColor: Colors.transparent,
         actions: [
           GestureDetector(
-              onTap: () => skipIntro(),
-              child: Container(
-                margin: EdgeInsets.only(right: 20),
-                alignment: Alignment.centerRight,
-                child: Text(
-                  "skip",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontFamily: 'Rubik-SemiBold'),
-                ),
-              ))
+              onTap: () => isLoading ? null : skipIntro(),
+              child: !isLoading
+                  ? Container(
+                      margin: EdgeInsets.only(right: 20),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "skip",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontFamily: 'Rubik-SemiBold'),
+                      ),
+                    )
+                  : Container())
         ],
       ),
       body: SingleChildScrollView(
