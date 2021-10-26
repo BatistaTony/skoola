@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -23,7 +22,7 @@ class Settings extends StatelessWidget {
     return Scaffold(
       appBar: SimpleAppBar(
         title: "Settings",
-        isCanForward: false,
+        canBack: false,
       ).build(context),
       body: Container(
         padding: EdgeInsets.all(20),
