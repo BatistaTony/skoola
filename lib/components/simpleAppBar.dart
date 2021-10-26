@@ -4,9 +4,9 @@ import 'package:flutter_svg/svg.dart';
 class SimpleAppBar extends StatelessWidget {
   final String? title;
   final VoidCallback? goBackFunc;
-  final bool isCanForward;
+  final bool canBack;
   const SimpleAppBar(
-      {Key? key, this.title, this.goBackFunc, this.isCanForward = true})
+      {Key? key, this.title, this.goBackFunc, this.canBack = true})
       : super(key: key);
 
   @override
@@ -23,8 +23,8 @@ class SimpleAppBar extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
         leading: GestureDetector(
-          onTap: isCanForward ? goBack : null,
-          child: isCanForward
+          onTap: canBack ? goBack : null,
+          child: canBack
               ? Container(
                   width: 15,
                   height: 15,
