@@ -3,7 +3,8 @@ import 'package:skoola/components/simpleAppBar.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class MyCourses extends StatefulWidget {
-  const MyCourses({Key? key}) : super(key: key);
+  final bool? canBack;
+  const MyCourses({Key? key, this.canBack = false}) : super(key: key);
 
   @override
   _MyCoursesState createState() => _MyCoursesState();
@@ -16,7 +17,7 @@ class _MyCoursesState extends State<MyCourses> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SimpleAppBar(
-        isCanForward: false,
+        canBack: widget.canBack!,
         title: "My courses",
       ).build(context),
       body: SingleChildScrollView(

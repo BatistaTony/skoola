@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:redux/redux.dart';
-import 'package:skoola/components/customNavigationBar.dart';
 import 'package:skoola/components/simpleAppBar.dart';
-import 'package:skoola/screens/course/course.dart';
 import 'package:skoola/screens/myCourses/myCourses.dart';
 import 'package:skoola/store/app_state.dart';
 

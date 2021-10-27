@@ -1,8 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:skoola/components/courseCard.dart';
 import 'package:skoola/components/customAppBar.dart';
-import 'package:skoola/components/customNavigationBar.dart';
 import 'package:skoola/components/searchField.dart';
 import 'package:skoola/models/course-data.dart';
 import 'package:skoola/store/app_state.dart';
@@ -12,10 +12,6 @@ class ContentHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void seePreview(CourseType course) {
-      Navigator.pushNamed(context, "coursePreview");
-    }
-
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
@@ -39,23 +35,7 @@ class ContentHome extends StatelessWidget {
                       ],
                     )),
               )),
-          body: Center(
-            child: Container(
-              padding: EdgeInsets.only(left: 20, right: 20, bottom: 0, top: 20),
-              alignment: Alignment.topCenter,
-              child: ListView(
-                  children: courses
-                      .map((course) => new CourseCard(
-                            cover: course.cover,
-                            price: course.price,
-                            title: course.title,
-                            description: course.description,
-                            tags: course.tags,
-                            press: () => seePreview(course),
-                          ))
-                      .toList()),
-            ),
-          ),
+          body: Center(child: HomeCourseContent()),
           // bottomNavigationBar: CustomNavigationBar(
           //   navigateTo: (page) => print(page),
           //   initialPage: "home",
@@ -63,6 +43,71 @@ class ContentHome extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class HomeCourseContent extends StatefulWidget {
+  const HomeCourseContent({Key? key}) : super(key: key);
+
+  @override
+  _HomeCourseContentState createState() => _HomeCourseContentState();
+}
+
+class _HomeCourseContentState extends State<HomeCourseContent> {
+  List<CourseType> listCourses = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20, bottom: 0, top: 20),
+      alignment: Alignment.topCenter,
+      child: FutureBuilder(
+        future: getCourses(),
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else {
+            List<QueryDocumentSnapshot<Map<String, dynamic>>> myCourses =
+                snapshot.data
+                    as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
+            return ListView(
+                children: myCourses.map<Widget>((course) {
+              List<String>? tags = course.data()["tags"] as List<String>;
+              print("inside the widget ==> $tags");
+
+              var shortDescription =
+                  "${course.data()["description"].toString().substring(0, 90)}...";
+
+              return new CourseCard(
+                cover: course.data()["cover"],
+                price: course.data()["price"],
+                title: course.data()["name"],
+                description: shortDescription,
+                tags: ["tags"],
+                press: () => seePreview(course.data()),
+              );
+            }).toList());
+          }
+        },
+      ),
+    );
+  }
+
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getCourses() async {
+    FirebaseFirestore firebaseDb = FirebaseFirestore.instance;
+    QuerySnapshot<Map<String, dynamic>> coursesCollection =
+        await firebaseDb.collection("courses").get();
+    print(coursesCollection.docs[0]["id"]);
+    return coursesCollection.docs.toList();
+  }
+
+  void seePreview(dynamic course) {
+    Navigator.pushNamed(context, "coursePreview");
   }
 }
 

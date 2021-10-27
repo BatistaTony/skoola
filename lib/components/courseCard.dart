@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CourseCard extends StatelessWidget {
   final String? cover;
   final String? title;
-  final String? tags;
+  final List<String>? tags;
   final String? description;
   final Object? price;
   final VoidCallback? press;
@@ -19,6 +19,7 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: press,
       child: Container(
@@ -35,12 +36,13 @@ class CourseCard extends StatelessWidget {
               children: [
                 Container(
                     height: 189,
+                    width: size.width,
                     child: ClipRRect(
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(14),
                             topRight: Radius.circular(14)),
-                        child: Image.asset(
-                          "assets/images/${cover ?? "logo.png"}",
+                        child: Image.network(
+                          cover != null ? "$cover" : "assets/images/logo.png",
                           fit: BoxFit.cover,
                         ))),
                 Positioned(
@@ -86,7 +88,7 @@ class CourseCard extends StatelessWidget {
                       margin: EdgeInsets.only(top: 3),
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        tags ?? "",
+                        transformTags(tags!),
                         style: TextStyle(
                             color: Color(0xff0079F1),
                             fontFamily: 'Rubik-Medium',
@@ -114,5 +116,22 @@ class CourseCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String transformTags(List<String> tags) {
+    if (tags.length >= 1) {
+      var tagsString = tags
+          .map((tag) {
+            return "#$tag ";
+          })
+          .toString()
+          .replaceAll("(", "")
+          .replaceAll(")", "");
+
+      print(tagsString);
+      return tagsString;
+    } else {
+      return "";
+    }
   }
 }
