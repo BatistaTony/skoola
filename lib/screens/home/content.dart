@@ -58,8 +58,8 @@ class _ContentHomeState extends State<ContentHome> {
                     width: size.width,
                     child: Center(
                       child: Container(
-                        width: 70,
-                        height: 70,
+                        width: 50,
+                        height: 50,
                         child: CircularProgressIndicator(
                           strokeWidth: 1.0,
                           color: Colors.white,
@@ -85,7 +85,22 @@ class _ContentHomeState extends State<ContentHome> {
                         })
                       : myCourses;
 
-                  print(coursesFiltered.map((e) => e.data()));
+                  if (coursesFiltered.isEmpty) {
+                    return Container(
+                      height: size.height * 0.80,
+                      width: size.width,
+                      child: Center(
+                        child: Text(
+                          "Course was not found !",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontFamily: 'Rubik-Medium'),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  }
 
                   return ListView(
                       children: coursesFiltered
