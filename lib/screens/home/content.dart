@@ -31,119 +31,62 @@ class ContentHome extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SearchField(),
+                        SearchField(
+                          inputOnchange: inputOnchange,
+                        ),
                       ],
                     )),
               )),
-          body: Center(child: HomeCourseContent()),
-          // bottomNavigationBar: CustomNavigationBar(
-          //   navigateTo: (page) => print(page),
-          //   initialPage: "home",
-          // ),
+          body: Center(
+              child: Container(
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 0, top: 20),
+            alignment: Alignment.topCenter,
+            child: StreamBuilder(
+              stream: getCourses(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else {
+                  var myCourses = snapshot.data!.docs;
+                  return ListView(
+                      children:
+                          myCourses.map<Widget>((DocumentSnapshot document) {
+                    Map<String, dynamic> course =
+                        document.data()! as Map<String, dynamic>;
+                    List<String>? tags = List.castFrom(course["tags"]);
+
+                    return new CourseCard(
+                      cover: course["cover"],
+                      price: course["price"],
+                      title: course["title"],
+                      description: course["description"],
+                      tags: tags,
+                      press: () => seePreview(course, context),
+                    );
+                  }).toList());
+                }
+              },
+            ),
+          )),
         );
       },
     );
   }
-}
 
-class HomeCourseContent extends StatefulWidget {
-  const HomeCourseContent({Key? key}) : super(key: key);
-
-  @override
-  _HomeCourseContentState createState() => _HomeCourseContentState();
-}
-
-class _HomeCourseContentState extends State<HomeCourseContent> {
-  List<CourseType> listCourses = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(left: 20, right: 20, bottom: 0, top: 20),
-      alignment: Alignment.topCenter,
-      child: FutureBuilder(
-        future: getCourses(),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else {
-            List<QueryDocumentSnapshot<Map<String, dynamic>>> myCourses =
-                snapshot.data
-                    as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
-            return ListView(
-                children: myCourses.map<Widget>((course) {
-              List<String>? tags = List.castFrom(course.data()["tags"]);
-
-              var shortDescription =
-                  "${course.data()["description"].toString().substring(0, 90)}...";
-
-              return new CourseCard(
-                cover: course.data()["cover"],
-                price: course.data()["price"],
-                title: course.data()["name"],
-                description: shortDescription,
-                tags: tags,
-                press: () => seePreview(course.data()),
-              );
-            }).toList());
-          }
-        },
-      ),
-    );
-  }
-
-  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> getCourses() async {
+  Stream<QuerySnapshot<Map<String, dynamic>>> getCourses() {
     FirebaseFirestore firebaseDb = FirebaseFirestore.instance;
-    QuerySnapshot<Map<String, dynamic>> coursesCollection =
-        await firebaseDb.collection("courses").get();
-    print(coursesCollection.docs[0]["id"]);
-    return coursesCollection.docs.toList();
+    Stream<QuerySnapshot<Map<String, dynamic>>> coursesCollection =
+        firebaseDb.collection("courses").snapshots();
+
+    return coursesCollection;
   }
 
-  void seePreview(dynamic course) {
+  void seePreview(dynamic course, context) {
     Navigator.pushNamed(context, "coursePreview");
   }
-}
 
-List<CourseType> courses = [
-  CourseType(
-      cover: "cover.png",
-      price: 12.0000,
-      title: "UX Design",
-      description:
-          "You can launch a new career in web develop-ment today by learning HTML & CSS",
-      tags: "#ux, #skoola, #benga"),
-  CourseType(
-      cover: "cover.png",
-      price: 12,
-      title: "UX Design",
-      description:
-          "You can launch a new career in web develop-ment today by learning HTML & CSS",
-      tags: "#ux, #skoola, #benga"),
-  CourseType(
-      cover: "cover.png",
-      price: 12,
-      title: "Reactjs Basics",
-      description:
-          "You can launch a new career in web develop-ment today by learning HTML & CSS",
-      tags: "#reacr, #redux, #skoola"),
-  CourseType(
-      cover: "cover.png",
-      price: 12,
-      title: "UI Design",
-      description:
-          "You can launch a new career in web develop-ment today by learning HTML & CSS",
-      tags: "#ux, #skoola, #benga"),
-  CourseType(
-      cover: "cover.png",
-      price: 12,
-      title: "Java Design",
-      description:
-          "You can launch a new career in web develop-ment today by learning HTML & CSS",
-      tags: "#ux, #skoola, #benga")
-];
+  void inputOnchange(String value) {
+    print(value);
+  }
+}

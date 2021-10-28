@@ -13,7 +13,6 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
-  void Function(String)? inputOnchange;
   String? placeholder;
 
   @override
@@ -32,7 +31,7 @@ class _SearchFieldState extends State<SearchField> {
         child: TextFormField(
           maxLength: 60,
           textAlignVertical: TextAlignVertical.center,
-          onChanged: inputOnchange,
+          onChanged: widget.inputOnchange,
           style:
               TextStyle(color: Colors.white, fontFamily: 'Rubik', fontSize: 16),
           decoration: InputDecoration(

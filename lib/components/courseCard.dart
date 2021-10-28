@@ -20,6 +20,11 @@ class CourseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    var shortDescription = "${description.toString().substring(0, 90)}...";
+    var shortTile =
+        "${title!.length > 30 ? title.toString().substring(0, 25) + "..." : title}";
+
     return GestureDetector(
       onTap: press,
       child: Container(
@@ -77,7 +82,7 @@ class CourseCard extends StatelessWidget {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        title ?? "",
+                        shortTile,
                         style: TextStyle(
                             color: Colors.black,
                             fontFamily: 'Rubik-Medium',
@@ -100,7 +105,7 @@ class CourseCard extends StatelessWidget {
                       child: Container(
                         alignment: Alignment.bottomLeft,
                         child: Text(
-                          description ?? "",
+                          shortDescription,
                           style: TextStyle(
                               color: Color(0xff454545),
                               fontFamily: 'Rubki-Medium',
@@ -127,8 +132,6 @@ class CourseCard extends StatelessWidget {
           .toString()
           .replaceAll("(", "")
           .replaceAll(")", "");
-
-      print(tagsString);
       return tagsString;
     } else {
       return "";
