@@ -77,8 +77,7 @@ class _HomeCourseContentState extends State<HomeCourseContent> {
                     as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
             return ListView(
                 children: myCourses.map<Widget>((course) {
-              List<String>? tags = course.data()["tags"] as List<String>;
-              print("inside the widget ==> $tags");
+              List<String>? tags = List.castFrom(course.data()["tags"]);
 
               var shortDescription =
                   "${course.data()["description"].toString().substring(0, 90)}...";
@@ -88,7 +87,7 @@ class _HomeCourseContentState extends State<HomeCourseContent> {
                 price: course.data()["price"],
                 title: course.data()["name"],
                 description: shortDescription,
-                tags: ["tags"],
+                tags: tags,
                 press: () => seePreview(course.data()),
               );
             }).toList());
