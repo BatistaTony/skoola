@@ -13,8 +13,6 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
-  String? placeholder;
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -39,7 +37,7 @@ class _SearchFieldState extends State<SearchField> {
               border: InputBorder.none,
               disabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
-              hintText: placeholder ?? "Search",
+              hintText: widget.placeholder ?? "Search",
               suffixIcon: Container(
                   height: 15,
                   width: 15,

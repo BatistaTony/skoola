@@ -4,14 +4,21 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:skoola/components/courseCard.dart';
 import 'package:skoola/components/customAppBar.dart';
 import 'package:skoola/components/searchField.dart';
-import 'package:skoola/models/course-data.dart';
 import 'package:skoola/store/app_state.dart';
 
-class ContentHome extends StatelessWidget {
+class ContentHome extends StatefulWidget {
   const ContentHome({Key? key}) : super(key: key);
 
   @override
+  _ContentHomeState createState() => _ContentHomeState();
+}
+
+class _ContentHomeState extends State<ContentHome> {
+  String search = "";
+
+  @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, state) {
@@ -32,8 +39,8 @@ class ContentHome extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         SearchField(
-                          inputOnchange: inputOnchange,
-                        ),
+                            inputOnchange: inputOnchange,
+                            placeholder: "search here tags or title of course"),
                       ],
                     )),
               )),
@@ -46,12 +53,43 @@ class ContentHome extends StatelessWidget {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return Container(
+                    height: size.height * 0.80,
+                    width: size.width,
+                    child: Center(
+                      child: Container(
+                        width: 70,
+                        height: 70,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
                 } else {
                   var myCourses = snapshot.data!.docs;
+
+                  var coursesFiltered = search != ""
+                      ? myCourses.where((dynamic element) {
+                          return element
+                                  .data()!["title"]
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(search) ||
+                              element
+                                  .data()!["tags"]
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(search);
+                        })
+                      : myCourses;
+
+                  print(coursesFiltered.map((e) => e.data()));
+
                   return ListView(
-                      children:
-                          myCourses.map<Widget>((DocumentSnapshot document) {
+                      children: coursesFiltered
+                          .map<Widget>((DocumentSnapshot document) {
                     Map<String, dynamic> course =
                         document.data()! as Map<String, dynamic>;
                     List<String>? tags = List.castFrom(course["tags"]);
@@ -87,6 +125,8 @@ class ContentHome extends StatelessWidget {
   }
 
   void inputOnchange(String value) {
-    print(value);
+    setState(() {
+      search = value;
+    });
   }
 }
