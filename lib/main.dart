@@ -19,11 +19,12 @@ import 'package:skoola/screens/testResult/congrats.dart';
 import 'package:skoola/screens/testResult/failed.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:skoola/store/app_state.dart';
-import 'package:skoola/store/reducers/user.dart';
+import 'package:skoola/store/reducers/index.dart';
 
 Future<void> main() async {
   final UserEntity userState = new UserEntity("", "", "", "", "");
-  final _initialState = AppState(userState);
+  final CourseEntity courseState = new CourseEntity();
+  final _initialState = AppState(userState, courseState);
   final Store<AppState> _store =
       Store<AppState>(reducer, initialState: _initialState);
 
@@ -54,10 +55,10 @@ class MyApp extends StatelessWidget {
             future: firebaseApp,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                print("there is a error ===> " + snapshot.error.toString());
+                print("there is an error ===> " + snapshot.error.toString());
                 return Container(
-                    child:
-                        Center(child: Text("Something wrong with firebase")));
+                    child: Center(
+                        child: Text("Something wrong with firebase service")));
               } else if (snapshot.hasData) {
                 print("connected sucessfully !");
                 return Intro();

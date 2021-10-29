@@ -48,7 +48,7 @@ class _SearchFieldState extends State<SearchField> {
                     height: 15,
                     width: 15,
                   )),
-              hintStyle: TextStyle(color: Color(0xffFBF9F7))),
+              hintStyle: TextStyle(color: Colors.grey)),
         ),
       ),
     );

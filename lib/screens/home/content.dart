@@ -40,7 +40,8 @@ class _ContentHomeState extends State<ContentHome> {
                       children: [
                         SearchField(
                             inputOnchange: inputOnchange,
-                            placeholder: "search here tags or title of course"),
+                            placeholder:
+                                "search here tags or title of the course"),
                       ],
                     )),
               )),
@@ -136,7 +137,8 @@ class _ContentHomeState extends State<ContentHome> {
   }
 
   void seePreview(dynamic course, context) {
-    Navigator.pushNamed(context, "coursePreview");
+    print(course);
+    // Navigator.pushNamed(context, "coursePreview");
   }
 
   void inputOnchange(String value) {
